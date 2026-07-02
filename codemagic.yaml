@@ -11,9 +11,14 @@ workflows:
     scripts:
       - name: Get Flutter packages
         script: |
+          # Si tes fichiers sont dans un sous-dossier, on cherche le pubspec.yaml et on s'y déplace
+          DIR=$(find . -name "pubspec.yaml" -exec dirname {} \;)
+          if [ -n "$DIR" ]; then cd "$DIR"; fi
           flutter packages pub get
       - name: Build Android APK
         script: |
+          DIR=$(find . -name "pubspec.yaml" -exec dirname {} \;)
+          if [ -n "$DIR" ]; then cd "$DIR"; fi
           flutter build apk --release
     artifacts:
-      - build/app/outputs/flutter-apk/a
+      - "**/build/app/outputs/flutter-apk/app-release.apk"
